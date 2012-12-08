@@ -1,0 +1,72 @@
+#!/usr/bin/env node
+
+// 
+// fileserver
+// Command line script
+// 
+
+//// Configuration
+
+var options;
+
+// Read options file from disk
+try {
+  options = require(process.cwd()+'/fileserver-options.js');
+  // options = require('./fileserver-options');
+} catch(e) {
+  console.log(e);
+  options = {};
+}
+
+// Set options from commandline
+options.port = process.argv[2] || options.port || 3000;
+options.folder = process.argv[3] || options.folder || false;
+options.folders = options.folders || [];
+options.callback = options.callback || function(err){
+  if(err) {
+    console.error(err.stack || err);
+    console.log('\nExiting...');
+    process.exit(1);
+    return;
+  }
+  
+  console.log('Listening on port '+options.port);
+  console.log(pathmap);
+};
+options.onServerCreate = options.onServerCreate || function(server) {
+};
+options.onRequest = options.onRequest || function(req, res) {
+  res.writeHead(404);
+  res.write('Not found');
+  res.end();
+};
+
+if(options.folder) {
+  options.folders.push({folder: options.folder, prefix: ''});
+}
+
+//// Runtime
+
+var server = require('fileserver/lib/server').createServer(options, options.onRequest),
+    pathmap = server.pathmap;
+
+options.onServerCreate(server.server);
+
+// Read 
+pathmap.scanFolders(options.folders, function(err, p) {
+  if(err) {
+    return options.callback(err);
+  }
+  
+  server.server.once('error', function(err) {
+    server.server.removeListener('listening', options.callback);
+    options.callback(err);
+  });
+  
+  server.server.once('listening', function() {
+    server.server.removeListener('error', options.callback);
+    options.callback();
+  });
+  
+  server.listen(options.port);
+});
