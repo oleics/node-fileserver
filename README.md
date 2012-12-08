@@ -7,7 +7,7 @@ Install
 -------
 
 ```sh
-npm install fileserver
+npm install -g fileserver
 ```
 
 Usage
