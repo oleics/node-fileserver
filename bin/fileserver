@@ -22,6 +22,7 @@ try {
 options.port = process.argv[2] || options.port || 3000;
 options.folder = process.argv[3] || options.folder || false;
 options.folders = options.folders || [];
+options.files = options.files || [];
 options.callback = options.callback || function(err){
   if(err) {
     console.error(err.stack || err);
@@ -31,7 +32,8 @@ options.callback = options.callback || function(err){
   }
   
   console.log('Listening on port '+options.port);
-  console.log(pathmap);
+  // console.log(pathmap);
+  console.log(Object.keys(pathmap.paths));
 };
 options.onServerCreate = options.onServerCreate || function(server) {
 };
@@ -57,6 +59,8 @@ pathmap.scanFolders(options.folders, function(err, p) {
   if(err) {
     return options.callback(err);
   }
+  
+  pathmap.addFiles(options.files);
   
   server.server.once('error', function(err) {
     server.server.removeListener('listening', options.callback);
