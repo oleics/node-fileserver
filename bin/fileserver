@@ -26,8 +26,8 @@ try {
   options = {};
 }
 
-// Set options from commandline
-options.port = process.argv[2] || options.port || 3000;
+// Set options from command line
+options.port = !isNaN(process.argv[2]) ? process.argv[2] : (options.port || 3000);
 options.folder = process.argv[3] || options.folder || false;
 options.folders = options.folders || [];
 options.files = options.files || [];
