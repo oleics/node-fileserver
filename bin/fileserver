@@ -7,14 +7,22 @@
 
 //// Configuration
 
-var options;
+var optionsFile,
+    options,
+    path = require('path');
+
+if(process.argv[2] != null && isNaN(process.argv[2])) {
+  optionsFile = path.resolve(process.argv[2]);
+}
 
 // Read options file from disk
 try {
-  options = require(process.cwd()+'/fileserver-options.js');
-  // options = require('./fileserver-options');
+  options = require(optionsFile || process.cwd() + '/fileserver-options.js');
 } catch(e) {
-  console.log(e);
+  if(optionsFile != null) {
+    console.log(e);
+    process.exit(1);
+  }
   options = {};
 }
 
@@ -49,7 +57,7 @@ if(options.folder) {
 
 //// Runtime
 
-var server = require('fileserver/lib/server').createServer(options, options.onRequest),
+var server = require('../lib/server').createServer(options, options.onRequest),
     pathmap = server.pathmap;
 
 options.onServerCreate(server.server);
