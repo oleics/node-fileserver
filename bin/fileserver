@@ -50,6 +50,7 @@ options.onRequest = options.onRequest || function(req, res) {
   res.write('Not found');
   res.end();
 };
+options.reverseProxies = options.reverseProxies || [];
 
 if(options.folder) {
   options.folders.push({folder: options.folder, prefix: ''});

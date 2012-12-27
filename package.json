@@ -6,7 +6,8 @@
     "fileserver": "bin/fileserver"
   },
   "dependencies": {
-    "mime": "~1.2.7"
+    "mime": "~1.2.7",
+    "request": "~2.12.0"
   },
   "devDependencies": {},
   "optionalDependencies": {},
