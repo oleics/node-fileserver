@@ -6,7 +6,7 @@
 // 
 
 //// Configuration
-
+console.log(process.argv);
 var optionsFile,
     options,
     path = require('path');
@@ -39,9 +39,9 @@ options.callback = options.callback || function(err){
     return;
   }
   
-  console.log('Listening on port '+options.port);
   // console.log(pathmap);
   console.log(Object.keys(pathmap.paths));
+  console.log('Listening on port '+options.port);
 };
 options.onServerCreate = options.onServerCreate || function(server) {
 };
