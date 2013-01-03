@@ -40,7 +40,7 @@ options.callback = options.callback || function(err){
   }
   
   // console.log(pathmap);
-  console.log(Object.keys(pathmap.paths));
+  // console.log(Object.keys(pathmap.paths));
   console.log('Listening on port '+options.port);
 };
 options.onServerCreate = options.onServerCreate || function(server) {
