@@ -1,6 +1,6 @@
 {
   "name": "fileserver",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Lightwight fileserver with a command line script",
   "bin": {
     "fileserver": "bin/fileserver"
