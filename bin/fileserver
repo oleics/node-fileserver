@@ -73,14 +73,30 @@ if(options['reverse-proxy-url']) {
 }
 
 // Set callback
-options.callback = options.callback || function(err){
+options.callback = options.callback || function(err, server){
   if(err) {
     console.error(err.stack || err);
     console.log('\nExiting...');
     process.exit(1);
     return;
   }
-  console.log('Listening on port '+options.port);
+  
+  var address = server.server.address();
+  var url = 'http://'+address.address+':'+address.port+'';
+  
+  console.log('');
+  
+  console.log('Server @ ' + url);
+  
+  console.log('    reverseProxy:');
+  Object.keys(options.reverseProxy).forEach(function(key) {
+    console.log('        '+options.reverseProxy[key].proxy);
+  });
+  
+  console.log('    folders:');
+  Object.keys(options.folders).forEach(function(key) {
+    console.log('        ' + url + options.folders[key].prefix + ' -> ' + options.folders[key].folder);
+  });
 };
 
 // Set request-callback
@@ -92,7 +108,7 @@ options.onRequest = options.onRequest || function(req, res) {
 
 // Set server-create-callback
 options.onServerCreate = options.onServerCreate || function(server) {
-  console.log('onServerCreate');
+//  console.log('onServerCreate');
 };
 
 //console.log(options);
@@ -118,7 +134,7 @@ pathmap.scanFolders(options.folders, function(err, p) {
   
   server.server.once('listening', function() {
     server.server.removeListener('error', options.callback);
-    options.callback();
+    options.callback(null, server);
   });
   
   if(options.port != null && options.host != null) {
